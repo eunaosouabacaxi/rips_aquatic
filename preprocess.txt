@@ -129,3 +129,4 @@ for df, dictionary in zip(list_df, list_dicts):
     for i in range(3, len(df.iloc[0,:])):
         comb_df[dictionary[i]] = df.iloc[:,i]
 comb_df = comb_df.dropna(subset=['regression_weights'])
+comb_df.to_csv("combined_20xx.csv")
