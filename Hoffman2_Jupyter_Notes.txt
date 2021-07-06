@@ -1,0 +1,83 @@
+---
+title: "Jupyter_H2"
+author: "Charlie"
+output: html_document
+---
+
+## Notes for using Jupyter of H2
+
+First, need to get an interactive job on a compute node
+
+```
+qrsh -l rh7,h_data=10G
+```
+
+Then load the modules you need
+
+```
+module load python/3.7.3
+module load R/4.1.0-DS
+```
+
+The python module load the python we installed with jupyter. But you can always install jupyter yourself and use that instead of the the one in the python module. You can always though a different python, like anaconda, for example, to create your own env to control the libraries/packages on your end. 
+
+The R module that was loaded has many pre-installed R libraries relating to data science stuff so you don't need to install them yourself. Though, you can always use a different R and use different libraries that you installed.
+
+Then, you will need to tell Jupyter where to find the R and the IR Kernel. 
+
+```
+R ### Start R session
+IRkernel::installspec()
+```
+
+If all goes ok, the R info should be saved in your local HOME Jupyter directory
+
+Then you need to start Jupyter
+
+```
+jupyter notebook password ## Create a personal jupyter password instead of using tokens
+
+jupyter notebook --ip 0.0.0.0 # you can replace notebook with lab
+```
+
+A jupyter session will then start. Keep note of the port number (most likely 8888) and the compute node you are running on. 
+
+Then keep this session open. (You will close this when you are done with jupyter)
+
+Next step, open a new terminal with forwarding ports to point to your Jupyter session
+
+```
+ssh -L YOUR_PORT_NUMBER:YOUR_NODE_ADDRESS:YOUR_PORT_NUMBER username@hoffman2.idre.ucla.edu
+## For example
+ssh -L 8888:n7444:8888 ccp2287@hoffman2.idre.ucla.edu
+## Asumming port 8888 and nodename n7444
+```
+
+Keep this session open.
+
+Then open a web browser and go to
+
+```
+localhost:8888
+```
+
+Jupyter should then open up!
+
+When you are done, don't forget to end the two terminal sessions.
+
+
+## Tips for using anaconda
+
+You can use jupyter with your own anaconda env that you installed on H2
+
+```
+## Assuming you have a conda env created named, MYCONDAENV
+qrsh -l h_data=6G,h_rt=1:00:00 
+module load anaconda3
+source $CONDA_DIR/etc/profile.d/conda.sh
+conda activate MYCONDAENV  
+pip install ipykernel
+ipython kernel install --user --name=MYCONDAENV
+```
+
+When you start up your jupyter session, you should see **MYCONDAENV** in the list of kernels. Since you are installing this entire conda env inside of your default jupyter, you can use the h2jupynb script default option, because it doesn't matter the version of jupyter/python, since your custom conda kernerl would be available.
