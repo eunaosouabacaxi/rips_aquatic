@@ -1,0 +1,20 @@
+list_df_early = []
+list_df_mid = []
+list_df_late = []
+
+for i in range(len(df)/78500):
+	df = comb_df.iloc[0+i*78500, :]
+	
+	if i%3 == 0:
+		list_df_early.append(df)
+
+	if i%3 == 1:
+		list_df_mid.append(df)
+
+	if i%3 == 2:
+		list_df_late.append(df)
+
+
+early_df = pd.concat(list_df_early)
+mid_df = pd.concat(list_df_mid)
+late_df = pd.concat(list_df_late)
