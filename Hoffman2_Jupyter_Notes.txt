@@ -9,7 +9,7 @@ output: html_document
 First, need to get an interactive job on a compute node
 
 ```
-qrsh -l rh7,h_data=10G
+qrsh -l rh7,h_data=10G,h_rt=3:00:00
 ```
 
 Then load the modules you need
