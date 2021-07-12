@@ -58,8 +58,39 @@ for i in range(50):
     comb_df = pp.combine2(weights_df, list_df)
     out_comb = 'combined_2012_' + str(i)
     comb_df.to_csv(out_comb)
-
 # this will save your csv's to the scratch folder, not the combined folder
 
+# center the data around 0 and fill the NaN's with 0
+def normalize_and_fill(df):
+
+    normalized_df = (df-df.mean())/df.std()
+    normalized_df = normalized_df.fillna(0)
+    
+    return normalized_df
+
+
+# splits the combined dataframe back into features
+# and targets with the datetime and squ and applies
+# normalize_and_fill to the features
+def features_and_targets(df):
+    
+    df = df.dropna(subset=['fwd_r_1_10_E4S_reg_wts_modelINVERSE_IMPACT_USE4S_ADVFIX_V0'])
+    index_df = df.loc[:, 'datetime':'squ']
+    features_df = normalize_and_fill(df.loc[:, 'regression_weights':'volume_curve_hist20_interactor'])
+    targets_df = df.loc[:, 'fwd_r_10_30_E4S_reg_wts_modelINVERSE_IMPACT_USE4S_ADVFIX_V0':'fwd_smoothed_HL1day_window2_E4S_reg_wts_modelINVERSE_IMPACT_USE4S_ADVFIX_V0_skip1']
+    
+    features_df = index_df.join(features_df)
+    targets_df = index_df.join(targets_df)
+    
+    return features_df, targets_df
+
+#test_read = pp.read('combined_2012_0')
+for i in range(51):
+    fin = 'combined_2012_' + str(i)
+    df = pp.read(fin)
+    processed_features_df, processed_targets_df = features_and_targets(df)
+    processed_df = processed_features_df.merge(processed_targets_df, on = ['datetime', 'squ'])
+    fout = 'processed_2012_' + str(i) + '.csv'
+    processed_df.to_csv(fout)
 
     
