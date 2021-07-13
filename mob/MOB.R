@@ -1,11 +1,12 @@
 library("party")
 library("tidyverse")
-df_early_2012 <- read.csv(file = 'early_2012.csv')
+df_early_2012 <- readRDS('combined_2012_0.rds')
 head(df_early_2012)
+# We want to read only certain columns to avoid memory problems but how?
 df_early_2012$Unnamed..0 <- NULL
 df_early_2012$Unnamed..0.1 <- NULL
 print(names(df_early_2012)[6])
-for(i in 5:39) {
+for(i in 5:38) {
   # renaming predictors with X_i
   names(df_early_2012)[i] <- paste("X_", toString(i - 4), sep = "")
 }
