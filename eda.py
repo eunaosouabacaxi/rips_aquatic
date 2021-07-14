@@ -34,9 +34,9 @@ def sort_scores2(scores):
     
     
 #computes linear regression scores
-def linreg(features_df, targets_df, uni=False, multi=False, year, month, day, squ, hour=None, minute=None, period=None):
+def linreg(features_df, targets_df, year, month, day, squ, uni=False, multi=False, hour=None, minute=None, period=None):
     
-    if hour = None:
+    if hour == None:
         features = features_df.loc[(features_df['datetime'].dt.date >= datetime.date(year, month, day))
                                            & (features_df['datetime'].dt.date < datetime.date(year, month, day+1))
                                            & (features_df['squ'] == squ)]
@@ -58,9 +58,9 @@ def linreg(features_df, targets_df, uni=False, multi=False, year, month, day, sq
         
     if uni:
         scores = []
-        y = np.array(targets_jan_13_2015_30163['y2']).reshape(-1,1)
-        for feature in features_jan_13_2015_30163.loc[:,'weights':'z15'].columns:
-            x = np.array(features_jan_13_2015_30163[feature]).reshape(-1,1)
+        y = np.array(targets['y2']).reshape(-1,1)
+        for feature in features.loc[:,'weights':'z15'].columns:
+            x = np.array(features[feature]).reshape(-1,1)
             reg = LinearRegression()
             reg.fit(x, y)
             score = reg.score(x , y)
@@ -70,11 +70,11 @@ def linreg(features_df, targets_df, uni=False, multi=False, year, month, day, sq
         
     if multi:
         scores = []
-        y = np.array(targets_jan_13_2015_30163['y2']).reshape(-1,1)
-        for feature1 in features_jan_13_2015_30163.loc[:,'weights':'z15'].columns:
-            for feature2 in features_jan_13_2015_30163.loc[:,'weights':'z15'].columns:
-                feat1 = np.array(features_jan_13_2015_30163[feature1]).reshape(-1, 1)
-                feat2 = np.array(features_jan_13_2015_30163[feature2]).reshape(-1, 1)
+        y = np.array(targets['y2']).reshape(-1,1)
+        for feature1 in features.loc[:,'weights':'z15'].columns:
+            for feature2 in features.loc[:,'weights':'z15'].columns:
+                feat1 = np.array(features[feature1]).reshape(-1, 1)
+                feat2 = np.array(features[feature2]).reshape(-1, 1)
                 x = np.concatenate((feat1, feat2), axis=1)
                 reg = LinearRegression()
                 reg.fit(x, y)
@@ -86,4 +86,3 @@ def linreg(features_df, targets_df, uni=False, multi=False, year, month, day, sq
     return sorted_scores
                 
     
-        
