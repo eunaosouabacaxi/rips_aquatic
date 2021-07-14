@@ -3,6 +3,7 @@ import pandas as pd
 import datetime
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 
 # function for linreg()
@@ -84,5 +85,52 @@ def linreg(features_df, targets_df, year, month, day, squ, uni=False, multi=Fals
         sorted_scores = sort_scores2(scores)[-10:]
         
     return sorted_scores
+
+
+def count_top_feats(feature_df, target_df, year, month, day, hour=None, minute=None, period=None):
+    features_dict = {}
+    scores_list = []
+    squ_list = feature_df['squ'].unique()
+    for squ in squ_list:
+        scores = linreg(feature_df, target_df, year, month, day, squ, uni=True, hour=hour, minute=minute, period=period)
+        print(scores)
+        scores_list.append(scores)
+    
+    for i in range(len(scores_list)):
+        for j in range(len(scores_list[i])):
+            if scores_list[i][j][0] in features_dict:
+                features_dict[scores_list[i][j][0]] += 1
+            else:
+                features_dict[scores_list[i][j][0]] = 1
                 
+    return features_dict
+                    
+    
+def plot_all(feature_df, target_df):
+    
+    figsize = (30,24)
+    cols = 5
+    rows = len(feature_df.loc[:,'weights':'z15'].columns) // cols + 1
+
+    axs = plt.figure(figsize=figsize).subplots(rows, cols)
+    for ax, col in zip(axs.flat, feature_df.loc[:,'weights':'z15'].columns):
+        ax.scatter(feature_df[col], target_df['y2'], s=0.5)
+        ax.set_xlabel(col)
+        ax.set_ylabel('y2')
+        
+    plt.tight_layout()
+    plt.show()
+    
+    
+def plot_3d(feature_df, target_df, feat1, feat2):
+    x = feature_df[feat1]
+    y = feature_df[feat2]
+    z = target_df['y2']
+
+    fig = plt.figure()
+    ax = fig.add_subplot(projection='3d')
+    ax.scatter(x, y, z)
+    ax.set_xlabel(feat1)
+    ax.set_ylabel(feat2)
+    ax.set_zlabel('y2')
     
