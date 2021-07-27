@@ -4,6 +4,7 @@ import datetime
 from sklearn.linear_model import LinearRegression
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
+import statsmodels.api as sm
 
 
 # function for linreg()
@@ -193,7 +194,79 @@ def ols_results(feature_df, target_df, x=None, z=None, y='y2'):
     #reg.fit(x__, y_)
     #coef = reg.coef_
     results = sm.OLS(y_, x__).fit()
+    f = results.fvalue
+    p = results.f_pvalue
+    
+    return f, p
     
     #print('The coefficients are: \n', coef[0], '\n')
 
-    print(results.summary())
+    #print(results.summary())
+    
+    
+def ols_results_wald(feature_df, target_df, x=None, z=None, y='y2'):
+    
+    q1 = feature_df[z].quantile(.25)
+    q2 = feature_df[z].quantile(.5)
+    q3 = feature_df[z].quantile(.75)
+    
+    features_q1 = feature_df[feature_df[z] < q1]
+    features_q2 = feature_df[(feature_df[z] >= q1) & (feature_df[z] < q2)]
+    features_q3 = feature_df[(feature_df[z] >= q2) & (feature_df[z] < q3)]
+    features_q4 = feature_df[feature_df[z] >= q3]
+
+    targets_q1 = target_df[feature_df[z] < q1]
+    targets_q2 = target_df[(feature_df[z] >= q1) & (feature_df[z] < q2)]
+    targets_q3 = target_df[(feature_df[z] >= q2) & (feature_df[z] < q3)]
+    targets_q4 = target_df[feature_df[z] >= q3]
+    
+    y_q1 = np.array(targets_q1[y]).reshape(-1,1)
+    y_q2 = np.array(targets_q2[y]).reshape(-1,1)
+    y_q3 = np.array(targets_q3[y]).reshape(-1,1)
+    y_q4 = np.array(targets_q4[y]).reshape(-1,1)
+    
+    zeros_q1 = np.zeros(np.array(features_q1[x]).reshape(-1,1).shape)
+    zeros_q2 = np.zeros(np.array(features_q2[x]).reshape(-1,1).shape)
+    zeros_q3 = np.zeros(np.array(features_q3[x]).reshape(-1,1).shape)
+    zeros_q4 = np.zeros(np.array(features_q4[x]).reshape(-1,1).shape)
+    
+    x_ = np.array(feature_df[x]).reshape(-1, 1)
+
+    x_q2 = np.array(features_q2[x]).reshape(-1, 1)
+    x_q3 = np.array(features_q3[x]).reshape(-1, 1)
+    x_q4 = np.array(features_q4[x]).reshape(-1, 1)
+
+    x_q2 = np.concatenate((zeros_q1, x_q2, zeros_q3, zeros_q4), axis=0)
+    x_q3 = np.concatenate((zeros_q1, zeros_q2, x_q3, zeros_q4), axis=0)
+    x_q4 = np.concatenate((zeros_q1, zeros_q2, zeros_q3, x_q4), axis=0)
+
+    z_q2 = np.array(features_q2[z]).reshape(-1, 1)
+    z_q3 = np.array(features_q3[z]).reshape(-1, 1)
+    z_q4 = np.array(features_q4[z]).reshape(-1, 1)
+
+    z_q2 = np.concatenate((zeros_q1, z_q2, zeros_q3, zeros_q4), axis=0)
+    z_q3 = np.concatenate((zeros_q1, zeros_q2, z_q3, zeros_q4), axis=0)
+    z_q4 = np.concatenate((zeros_q1, zeros_q2, zeros_q3, z_q4), axis=0)
+
+    x_z_q2 = x_q2*z_q2
+    x_z_q3 = x_q3*z_q3
+    x_z_q4 = x_q4*z_q4
+
+    bias = np.ones(x_z_q2.shape)
+    
+    x__ = np.concatenate((bias, x_, x_z_q2, x_z_q3, x_z_q4), axis=1)
+    y_ = np.concatenate((y_q1, y_q2, y_q3, y_q4), axis=0)
+
+    #reg = LinearRegression()
+    #reg.fit(x__, y_)
+    #coef = reg.coef_
+    results = sm.OLS(y_, x__).fit()
+    w = results.wald_test(np.eye(len(results.params)[2:5]))
+    f = w.f_value
+    p = w.p_value
+    
+    return f, p
+    
+    #print('The coefficients are: \n', coef[0], '\n')
+
+    #print(results.summary())
