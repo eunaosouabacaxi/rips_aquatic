@@ -60,3 +60,51 @@ library(dplyr)
 x = nrow(inner_join(result_1$`3`, result_2$`3`))
 ratio = x / nrow(result_1$`3`)
 ratio
+
+
+library("partykit")
+## Load data
+# using a week to train
+df <- readRDS("/u/project/cratsch/haoyudu/rds/combined_week_1_morning_2015.rds")
+
+library("tidyverse")
+library("arules")
+library("dplyr")
+
+## preprocess for tree
+df$Unnamed..0_x <- NULL
+df$Unnamed..0.1_x <- NULL
+df$Unnamed..0_y <- NULL
+df$Unnamed..0.1_y <- NULL
+head(df)
+
+print(names(df)[89])
+
+## mob but linear
+# continuous Z's
+df_tree_cont <- lmtree(y2 ~ x8 | z4 + z7 + z8,
+                  data = df, minsize = 40000)
+print(df_tree_cont)
+
+## discretize
+disc <- discretizeDF(df[,39:89], default = list(method = "interval", breaks = 10,
+                                       labels = 1:10))
+df_1 <- df[,1:38]
+df_2 <- df[,90:95]
+df_final <- data.frame(data.frame(df_1,disc),df_2)
+
+## mob but linear
+# discrete Z's
+df_tree_disc <- lmtree(y2 ~ x8 | z4 + z7 + z8,
+                  data = df_final, minsize = 40000)
+print(df_tree_disc)
+
+## splitting the dataframe into nodes
+result_1 <- split(df_final, predict(df_tree_cont, newdata = df_final, type = "node"))
+result_2 <- split(df_final, predict(df_tree_disc, newdata = df_final, type = "node"))
+
+## calculate how many rows are the same in one node
+# CHANGE THE NODE NUMBER
+x = nrow(inner_join(result_1$`3`, result_2$`3`))
+
+
