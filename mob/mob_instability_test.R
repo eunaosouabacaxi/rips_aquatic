@@ -42,6 +42,21 @@ bh <- BostonHousing[c(1:50), ]
 predict(bh_tree, newdata = bh, type = "node")
 #predict(bh_tree, newdata = bh, type = "response")
 #predict(bh_tree, newdata = bh, type = function(object) summary(object)$r.squared)
-split(bh, predict(bh_tree, newdata = bh, type = "node"))
+result_1 <- split(bh, predict(bh_tree, newdata = bh, type = "node"))
+result_1
 nodeapply(bh_tree, nodeids(bh_tree), function(x) info_node(x)$nobs)
 data_party(bh_tree, id = 3)
+
+## new tree for comparison
+bh_tree_fewer_z <- lmtree(medv ~ log(lstat) + I(rm^2) |
+                    indus + tax + crim + ptratio,
+                  data = BostonHousing, minsize = 40)
+plot(bh_tree)
+bh_copy <- BostonHousing[c(1:50), ]
+result_2 <- split(bh_copy, predict(bh_tree_fewer_z, newdata = bh_copy, type = "node"))
+result_2$`3`
+
+library(dplyr)
+x = nrow(inner_join(result_1$`3`, result_2$`3`))
+ratio = x / nrow(result_1$`3`)
+ratio
