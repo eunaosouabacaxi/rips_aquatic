@@ -8,20 +8,38 @@ from sklearn.linear_model import LinearRegression
 import statsmodels.api as sm
 
 # load in 3 months of data jan feb mar CHANGE FILE NAMES
-features_jan_2015 = pp.read_npy1('/u/project/cratsch/tescala/month_split_right/features_jan_2015.npy', features=True)
-targets_jan_2015 = pp.read_npy1('/u/project/cratsch/tescala/month_split_right/targets_jan_2015.npy', targets=True)
+features_jan = pp.read_npy1('/u/project/cratsch/tescala/month_split_right/features_jan_2015.npy', features=True)
+targets_jan = pp.read_npy1('/u/project/cratsch/tescala/month_split_right/targets_jan_2015.npy', targets=True)
 
-features_feb_2015 = pp.read_npy1('/u/project/cratsch/tescala/month_split_right/features_feb_2015.npy', features=True)
-targets_feb_2015 = pp.read_npy1('/u/project/cratsch/tescala/month_split_right/targets_feb_2015.npy', targets=True)
+features_feb = pp.read_npy1('/u/project/cratsch/tescala/month_split_right/features_feb_2015.npy', features=True)
+targets_feb = pp.read_npy1('/u/project/cratsch/tescala/month_split_right/targets_feb_2015.npy', targets=True)
 
-features_mar_2015 = pp.read_npy1('/u/project/cratsch/tescala/month_split_right/features_mar_2015.npy', features=True)
-targets_mar_2015 = pp.read_npy1('/u/project/cratsch/tescala/month_split_right/targets_mar_2015.npy', targets=True)
+features_mar = pp.read_npy1('/u/project/cratsch/tescala/month_split_right/features_mar_2015.npy', features=True)
+targets_mar = pp.read_npy1('/u/project/cratsch/tescala/month_split_right/targets_mar_2015.npy', targets=True)
+
+features_jan_2015 = features_jan.loc[:, 'datetime':'z1']
+z_list = ['z2', 'z3', 'z4', 'z5', 'z6', 'z7', 'z8', 'z9', 'z10', 'z11', 'z12']
+for z in z_list:
+    features_jan_2015[z] = features_jan[z]
+    
+features_feb_2015 = features_feb.loc[:, 'datetime':'z1']
+z_list = ['z2', 'z3', 'z4', 'z5', 'z6', 'z7', 'z8', 'z9', 'z10', 'z11', 'z12']
+for z in z_list:
+    features_feb_2015[z] = features_feb[z]
+    
+features_mar_2015 = features_mar.loc[:, 'datetime':'z1']
+z_list = ['z2', 'z3', 'z4', 'z5', 'z6', 'z7', 'z8', 'z9', 'z10', 'z11', 'z12']
+for z in z_list:
+    features_mar_2015[z] = features_mar[z]
 
 # center the data around 0 and fill the NaN's with 0 EDIT THIS
 def normalize_and_fill(df):
+    
+    m = df.loc[:,'x1':'z12'].mean()
+    std = df.loc[:,'x1':'z12'].std()
+    df.loc[:,'x1':'z12'] = (df.loc[:,'x1':'z12']-m) / std
 
-    normalized_df = (df-df.mean())/df.std()
-    normalized_df = normalized_df.fillna(0)
+    normalized_df = df.fillna(0)
     
     return normalized_df
 
