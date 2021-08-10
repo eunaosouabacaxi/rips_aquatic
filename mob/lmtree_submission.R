@@ -1,10 +1,10 @@
-library("party")
+library("partykit")
 library("arules")
 library("rpart")
 library("tidyverse")
 
-prefix <- "/u/project/cratsch/matthewc/ft_month_"
-suffix <- "_morning_2015.rds"
+prefix <- "/u/project/cratsch/matthewc/ft_week_"
+suffix <- "_early_2015.rds"
 
 train <- function(train_months) {
   train_file <- paste(paste(prefix,train_months[1],sep=""),suffix,sep="")
@@ -33,10 +33,7 @@ train <- function(train_months) {
   
   ctrl <- mob_control(alpha = 0.05, bonferroni = TRUE, minsplit = 5000, verbose = TRUE)
   
-  results <- mob(y2 ~ x8 + x7 + x6 + x5 + x3 | z8,
-                 data = training_final, control = ctrl, model = linearModel
-  )
-  #results <- lmtree(y2 ~ x8 + x7 + x6 + x5 + x3 | z8, data = training_final, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+  results <- lmtree(y2 ~ x8 + x7 + x6 + x2 + x3 | z8, data = training_final, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
   saveRDS(results,file = paste(paste("/u/project/cratsch/matthewc/model_",toString(train_months),sep=""),".rds",sep=""))
 }
 test <- function(train_months, test_months) {
@@ -80,13 +77,13 @@ test <- function(train_months, test_months) {
   net_return <- 0
   predictions <- predict(model, newdata = testing_final, type = "response")
   for(i in 1:nrow(testing_final)) {
-    ret <- sign(predictions[i])*testing_final$y1[i]
+    ret <- sign(predictions[i])*testing_final$y1[i]*testing_final$weights[i]
     if(!is.na(ret)) {
       if(ret > 0) {
         correct <- correct + 1
       }
       net_return <- net_return + ret
-      base_return <- base_return + testing_final$y1[i]
+      base_return <- base_return + ret*sign(predictions[i])
     }
   }
   print(net_return)
@@ -95,9 +92,8 @@ test <- function(train_months, test_months) {
 }
 
 
-trainmonths <- c(1,2,3)
-testmonths <- c(4)
+trainmonths <- c(1,2,3,4)
+testmonths <- c(5)
 #train(trainmonths)
 
 test(trainmonths,testmonths)
-
