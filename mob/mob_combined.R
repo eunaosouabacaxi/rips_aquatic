@@ -27,58 +27,58 @@ inter_5 <- 0
 x <- c()
 z <- c()
 for (i in 1:34) {
-  str <- paste("x", i, sep = "")
-  x <- append(x, str)
+    str2 <- paste("x", i, sep = "")
+    x <- append(x, str2)
 }
 for (i in 1:12) {
-  str <- paste("z", i, sep = "")
-  z <- append(z, str)
+    str3 <- paste("z", i, sep = "")
+    z <- append(z, str3)
 }
 
-feature_selection <- function(month,day,N,M) {
-  # concat file name
-  date <- paste(String(month), String(day))
-  s <- paste(paste(str, date), str1)
-  features <- read.csv(s)
-  
-  # saves how many times each X and Z appear in the feature selection
-  x_ctr <- c()
-  z_ctr <- c()
-  for (i in 1:34) {
-    x_list <- nrow(which(features == x[i], arr.ind = TRUE))
-    x_ctr <- append(x_ctr, x_list)
-  }
-  for (i in 1:12) {
-    z_list <- nrow(which(features == z[i], arr.ind = TRUE))
-    z_ctr <- append(z_ctr, z_list)
-  }
-  
-  # saves the top N X's and top M Z's into respective vectors
-  max_x_list <- c()
-  for (i in 1:N) {
-    max_x_list <- append(max_x_list, which.max(x_ctr))
-    x_ctr[which.max(x_ctr)] <- 0
-  }
-  
-  max_z_list <- c()
-  for (i in 1:M) {
-    max_z_list <- append(max_z_list, which.max(z_ctr))
-    z_ctr[which.max(z_ctr)] <- 0
-  }
-  
-  x_top <- c()
-  for (i in 1:5) {
-    x_top <- append(x_top, x[max_x_list[i]])
-  }
-  
-  z_top <- c()
-  for (i in 1:5) {
-    z_top <- append(z_top, z[max_z_list[i]])
-  }
-  
-  # 
-  if (!is.na(match(x_top[1], x))) {
-    f <- match(x_top[1], x)
+feature_selection <- function(month, day, N, M) {
+    # concat file name
+    date <- paste(month, paste("_", day, sep = ""), sep = "")
+    s <- paste(paste(str, date, sep = ""), str1, sep = "")
+    features <- read.csv(s)
+    
+    # saves how many times each X and Z appear in the feature selection
+    x_ctr <- c()
+    z_ctr <- c()
+    for (i in 1:34) {
+      x_list <- nrow(which(features == x[i], arr.ind = TRUE))
+      x_ctr <- append(x_ctr, x_list)
+    }
+    for (i in 1:12) {
+      z_list <- nrow(which(features == z[i], arr.ind = TRUE))
+      z_ctr <- append(z_ctr, z_list)
+    }
+
+    # saves the top N X's and top M Z's into respective vectors
+    max_x_list <- c()
+    for (i in 1:N) {
+      max_x_list <- append(max_x_list, which.max(x_ctr))
+      x_ctr[which.max(x_ctr)] <- 0
+    }
+    
+    max_z_list <- c()
+    for (i in 1:M) {
+      max_z_list <- append(max_z_list, which.max(z_ctr))
+      z_ctr[which.max(z_ctr)] <- 0
+    }
+
+    x_top <- c()
+    for (i in 1:5) {
+      x_top <- append(x_top, x[max_x_list[i]])
+    }
+    
+    z_top <- c()
+    for (i in 1:5) {
+      z_top <- append(z_top, z[max_z_list[i]])
+    }
+    
+    #
+    if (!is.na(match(x_top[1], x))) {
+      f <- match(x_top[1], x)
     if (f == 1) a <<- df$x1
     if (f == 2) a <<- df$x2
     if (f == 3) a <<- df$x3
@@ -113,10 +113,10 @@ feature_selection <- function(month,day,N,M) {
     if (f == 32) a <<- df$x32
     if (f == 33) a <<- df$x33
     if (f == 34) a <<- df$x34
-  }
-  
-  if (!is.na(match(x_top[2], x))) {
-    f <- match(x_top[2], x)
+    }
+
+    if (!is.na(match(x_top[2], x))) {
+      f <- match(x_top[2], x)
     if (f == 1) b <<- df$x1
     if (f == 2) b <<- df$x2
     if (f == 3) b <<- df$x3
@@ -151,10 +151,10 @@ feature_selection <- function(month,day,N,M) {
     if (f == 32) b <<- df$x32
     if (f == 33) b <<- df$x33
     if (f == 34) b <<- df$x34
-  }
-  
-  if (!is.na(match(x_top[3], x))) {
-    f <- match(x_top[3], x)
+    }
+
+    if (!is.na(match(x_top[3], x))) {
+      f <- match(x_top[3], x)
     if (f == 1) c <<- df$x1
     if (f == 2) c <<- df$x2
     if (f == 3) c <<- df$x3
@@ -189,10 +189,10 @@ feature_selection <- function(month,day,N,M) {
     if (f == 32) c <<- df$x32
     if (f == 33) c <<- df$x33
     if (f == 34) c <<- df$x34
-  }
-  
-  if (!is.na(match(x_top[4], x))) {
-    f <- match(x_top[4], x)
+    }
+
+    if (!is.na(match(x_top[4], x))) {
+      f <- match(x_top[4], x)
     if (f == 1) d <<- df$x1
     if (f == 2) d <<- df$x2
     if (f == 3) d <<- df$x3
@@ -227,10 +227,10 @@ feature_selection <- function(month,day,N,M) {
     if (f == 32) d <<- df$x32
     if (f == 33) d <<- df$x33
     if (f == 34) d <<- df$x34
-  }
-  
-  if (!is.na(match(x_top[5], x))) {
-    f <- match(x_top[5], x)
+    }
+
+    if (!is.na(match(x_top[5], x))) {
+      f <- match(x_top[5], x)
     if (f == 1) e <<- df$x1
     if (f == 2) e <<- df$x2
     if (f == 3) e <<- df$x3
@@ -265,10 +265,10 @@ feature_selection <- function(month,day,N,M) {
     if (f == 32) e <<- df$x32
     if (f == 33) e <<- df$x33
     if (f == 34) e <<- df$x34
-  }
-  
-  if (!is.na(match(z_top[1], z))) {
-    f <- match(z_top[1], z)
+    }
+    
+    if (!is.na(match(z_top[1], z))) {
+      f <- match(z_top[1], z)
     if (f == 1) inter_1 <<- df$z1
     if (f == 2) inter_1 <<- df$z2
     if (f == 3) inter_1 <<- df$z3
@@ -281,10 +281,10 @@ feature_selection <- function(month,day,N,M) {
     if (f == 10) inter_1 <<- df$z10
     if (f == 11) inter_1 <<- df$z11
     if (f == 12) inter_1 <<- df$z12
-  }
-  
-  if (!is.na(match(z_top[2], z))) {
-    f <- match(z_top[2], z)
+    }
+    
+    if (!is.na(match(z_top[2], z))) {
+      f <- match(z_top[2], z)
     if (f == 1) inter_2 <<- df$z1
     if (f == 2) inter_2 <<- df$z2
     if (f == 3) inter_2 <<- df$z3
@@ -297,10 +297,10 @@ feature_selection <- function(month,day,N,M) {
     if (f == 10) inter_2 <<- df$z10
     if (f == 11) inter_2 <<- df$z11
     if (f == 12) inter_2 <<- df$z12
-  }
-  
-  if (!is.na(match(z_top[3], z))) {
-    f <- match(z_top[3], z)
+    }
+    
+    if (!is.na(match(z_top[3], z))) {
+      f <- match(z_top[3], z)
     if (f == 1) inter_3 <<- df$z1
     if (f == 2) inter_3 <<- df$z2
     if (f == 3) inter_3 <<- df$z3
@@ -313,10 +313,10 @@ feature_selection <- function(month,day,N,M) {
     if (f == 10) inter_3 <<- df$z10
     if (f == 11) inter_3 <<- df$z11
     if (f == 12) inter_3 <<- df$z12
-  }
-  
-  if (!is.na(match(z_top[4], z))) {
-    f <- match(z_top[4], z)
+    }
+    
+    if (!is.na(match(z_top[4], z))) {
+      f <- match(z_top[4], z)
     if (f == 1) inter_4 <<- df$z1
     if (f == 2) inter_4 <<- df$z2
     if (f == 3) inter_4 <<- df$z3
@@ -329,10 +329,10 @@ feature_selection <- function(month,day,N,M) {
     if (f == 10) inter_4 <<- df$z10
     if (f == 11) inter_4 <<- df$z11
     if (f == 12) inter_4 <<- df$z12
-  }
-  
-  if (!is.na(match(z_top[5], z))) {
-    f <- match(z_top[5], z)
+    }
+    
+    if (!is.na(match(z_top[5], z))) {
+      f <- match(z_top[5], z)
     if (f == 1) inter_5 <<- df$z1
     if (f == 2) inter_5 <<- df$z2
     if (f == 3) inter_5 <<- df$z3
@@ -345,7 +345,7 @@ feature_selection <- function(month,day,N,M) {
     if (f == 10) inter_5 <<- df$z10
     if (f == 11) inter_5 <<- df$z11
     if (f == 12) inter_5 <<- df$z12
-  }
+    }
 }
 
 train <- function(train_months) {
@@ -434,7 +434,8 @@ test <- function(train_months, test_months) {
   print(correct/nrow(testing_final))
 }
 
-feature <- c(1,5,1,1)
+#feature <- c(1,5,1,1)
+feature_selection(1,5,1,1)
 trainmonths <- c(1,2,3,4)
 testmonths <- c(5)
 train(trainmonths)
