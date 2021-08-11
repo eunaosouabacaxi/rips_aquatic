@@ -377,7 +377,86 @@ train <- function(train_months, month, day, N, M) {
   
   ctrl <- mob_control(alpha = 0.05, bonferroni = TRUE, minsplit = 5000, verbose = TRUE)
   
-  results <- lmtree(y2 ~ a | inter_1, data = training_final, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    if (N == 1 & M == 1) {
+        results <- lmtree(y2 ~ a | inter_1, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    if (N == 2 & M == 1) {
+        results <- lmtree(y2 ~ a + b | inter_1, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    if (N == 3 & M == 1) {
+        results <- lmtree(y2 ~ a + b + c | inter_1, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    if (N == 4 & M == 1) {
+        results <- lmtree(y2 ~ a + b + c + d | inter_1, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    if (N == 5 & M == 1) {
+        results <- lmtree(y2 ~ a + b + c + d + e | inter_1, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    
+    if (N == 1 & M == 2) {
+        results <- lmtree(y2 ~ a | inter_1 + inter_2, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    if (N == 2 & M == 2) {
+        results <- lmtree(y2 ~ a + b | inter_1 + inter_2, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    if (N == 3 & M == 2) {
+        results <- lmtree(y2 ~ a + b + c | inter_1 + inter_2, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    if (N == 4 & M == 2) {
+        results <- lmtree(y2 ~ a + b + c + d | inter_1 + inter_2, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    if (N == 5 & M == 2) {
+        results <- lmtree(y2 ~ a + b + c + d + e | inter_1 + inter_2, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    
+    if (N == 1 & M == 3) {
+        results <- lmtree(y2 ~ a | inter_1 + inter_2 + inter_3, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    if (N == 2 & M == 3) {
+        results <- lmtree(y2 ~ a + b | inter_1 + inter_2 + inter_3, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    if (N == 3 & M == 3) {
+        results <- lmtree(y2 ~ a + b + c | inter_1 + inter_2 + inter_3, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    if (N == 4 & M == 3) {
+        results <- lmtree(y2 ~ a + b + c + d | inter_1 + inter_2 + inter_3, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    if (N == 5 & M == 3) {
+        results <- lmtree(y2 ~ a + b + c + d + e | inter_1 + inter_2 + inter_3, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+  
+    if (N == 1 & M == 4) {
+        results <- lmtree(y2 ~ a | inter_1 + inter_2 + inter_3 + inter_4, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    if (N == 2 & M == 4) {
+        results <- lmtree(y2 ~ a + b | inter_1 + inter_2 + inter_3 + inter_4, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    if (N == 3 & M == 4) {
+        results <- lmtree(y2 ~ a + b + c | inter_1 + inter_2 + inter_3 + inter_4, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    if (N == 4 & M == 4) {
+        results <- lmtree(y2 ~ a + b + c + d | inter_1 + inter_2 + inter_3 + inter_4, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    if (N == 5 & M == 4) {
+        results <- lmtree(y2 ~ a + b + c + d + e | inter_1 + inter_2 + inter_3 + inter_4, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    
+    if (N == 1 & M == 5) {
+        results <- lmtree(y2 ~ a | inter_1 + inter_2 + inter_3 + inter_4 + inter_5, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    if (N == 2 & M == 5) {
+        results <- lmtree(y2 ~ a + b | inter_1 + inter_2 + inter_3 + inter_4 + inter_5, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    if (N == 3 & M == 5) {
+        results <- lmtree(y2 ~ a + b + c | inter_1 + inter_2 + inter_3 + inter_4 + inter_5, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    if (N == 4 & M == 5) {
+        results <- lmtree(y2 ~ a + b + c + d | inter_1 + inter_2 + inter_3 + inter_4 + inter_5, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+    if (N == 5 & M == 5) {
+        results <- lmtree(y2 ~ a + b + c + d + e | inter_1 + inter_2 + inter_3 + inter_4 + inter_5, data = training_final, weights = training_final$weights, minsize = 5000, alpha = 0.05, bonferroni = TRUE)
+    }
+  
   saveRDS(results,file = paste(paste("/u/project/cratsch/haoyudu/model_",toString(train_months),sep=""),".rds",sep=""))
 }
 
