@@ -18,7 +18,7 @@ d <- 0
 e <- 0
 
 inter_1 <- 0
-inter_2 <- 0 
+inter_2 <- 0
 inter_3 <- 0
 inter_4 <- 0
 inter_5 <- 0
@@ -35,7 +35,8 @@ for (i in 1:12) {
     z <- append(z, str3)
 }
 
-feature_selection <- function(month, day, N, M) {
+feature_selection <- function(month, day, N, M, df) {
+    
     # concat file name
     date <- paste(month, paste("_", day, sep = ""), sep = "")
     s <- paste(paste(str, date, sep = ""), str1, sep = "")
@@ -76,7 +77,7 @@ feature_selection <- function(month, day, N, M) {
       z_top <- append(z_top, z[max_z_list[i]])
     }
     
-    #
+    # PROBLEM
     if (!is.na(match(x_top[1], x))) {
       f <- match(x_top[1], x)
     if (f == 1) a <<- df$x1
@@ -348,7 +349,7 @@ feature_selection <- function(month, day, N, M) {
     }
 }
 
-train <- function(train_months) {
+train <- function(train_months, month, day, N, M) {
   train_file <- paste(paste(prefix,train_months[1],sep=""),suffix,sep="")
   training <- readRDS(train_file)
   for(i in 2:length(train_months)) {
@@ -372,6 +373,7 @@ train <- function(train_months) {
   df_2 <- training[,90:95]
   
   training_final <- data.frame(data.frame(df_1,disc),df_2)
+  feat <- feature_selection(month, day, N, M, training_final)
   
   ctrl <- mob_control(alpha = 0.05, bonferroni = TRUE, minsplit = 5000, verbose = TRUE)
   
@@ -435,8 +437,9 @@ test <- function(train_months, test_months) {
 }
 
 #feature <- c(1,5,1,1)
-feature_selection(1,5,1,1)
+#feature_selection(1,5,1,1)
+#do.call(feature_selection, as.list(1,5,1,1))
 trainmonths <- c(1,2,3,4)
 testmonths <- c(5)
-train(trainmonths)
+train(trainmonths, 1, 5, 1, 1)
 test(trainmonths,testmonths)
