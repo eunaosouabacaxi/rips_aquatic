@@ -501,7 +501,7 @@ test <- function(train_months, test_months) {
   net_return <- 0
   predictions <- predict(model, newdata = testing_final, type = "response")
   for(i in 1:nrow(testing_final)) {
-    ret <- sign(predictions[i])*testing_final$y1[i]*testing_final$weights[i]
+    ret <- sign(predictions[i])*testing_final$y2[i]*testing_final$weights[i]
     if(!is.na(ret)) {
       if(ret > 0) {
         correct <- correct + 1
